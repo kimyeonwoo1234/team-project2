@@ -2,12 +2,14 @@
 {
     using System;
     using System.Runtime.CompilerServices;
+    using System.Xml.Linq;
 
     class Program
     {
         // 모든 몬스터 리스트
         private static List<Monster> monsterPool = new List<Monster>();
         private static Monster[] monsters;
+        private static Person[] persons;
         static void Main(string[] args)
         {
             GameDataSet();
@@ -63,7 +65,9 @@
         static void ShowStatus()
         {
             Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("**상태 보기**");
+            Console.ResetColor();
             Console.WriteLine("Lv. 01");
             Console.WriteLine("Chad (전사)");
             Console.WriteLine("공격력 : 10");
@@ -105,21 +109,27 @@
                 Console.Write("\n원하시는 행동을 입력해주세요.\n>> ");
 
                 int choice;
-                if (int.TryParse(Console.ReadLine(), out choice)) {
-                    if (choice == 0) {
+                if (int.TryParse(Console.ReadLine(), out choice)) 
+                {
+                    if (choice == 0) 
+                    {
                         GameMenu();
-                    } else {
+                    } 
+                    else 
+                    {
                         Console.WriteLine("잘못된 입력입니다.");
-                        ShowStatus();
+                        StartBattle();
                     }
-                } else {
+                } 
+                else 
+                {
                     Console.WriteLine("숫자를 입력해주세요.");
-                    ShowStatus();
+                    StartBattle();
                 }
             }
 
         static void SpawnMonster() {
-            int num = new Random().Next(1, 5);
+            int num = new Random().Next(3, 3);
             monsters = new Monster[num];
             for (int i = 0; i < num; i++) {
                 int monsterIndex = new Random().Next(0, monsterPool.Count());
@@ -133,15 +143,40 @@
                 Console.WriteLine();
             }
         }
+        
+        static void attakDamge()
+        {
 
+        }
+       
 
         class Person
         {
+            public string Name { get;  }           
             public int Health { get; set; }
-
-            public Person(int health)
+            public int Attack { get; set; }
+            public bool IsDead { get; set; }
+            public Person(string name ,int health, int attack)
             {
+                this.Name = name;
                 this.Health = health;
+                this.Attack = attack;
+            }
+
+            public void TakeDamage(int damage)
+            {
+                Health -= damage;
+                if (Health <= 0)
+                {
+                    IsDead = true;
+                    Console.WriteLine($"{Name} 이(가) 죽었습니다.");
+                }
+            }
+
+            public int AttckDamage()
+            {
+                int damage = (new Random().Next(Attack - 1, Attack + 2));
+                return damage;
             }
         }
         class Monster {
