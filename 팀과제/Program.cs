@@ -135,6 +135,15 @@
         }
 
 
+        class Person
+        {
+            public int Health { get; set; }
+
+            public Person(int health)
+            {
+                this.Health = health;
+            }
+        }
         class Monster {
             public string Name { get; set; }
             public int Health { get; set; }
